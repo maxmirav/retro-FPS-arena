@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swayAmount: 0.1
+  maxAmount: 0.08
   smoothAmount: 6
 --- !u!1 &170076733
 GameObject:
