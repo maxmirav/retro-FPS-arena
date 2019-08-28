@@ -15,14 +15,26 @@ public class PlayerMove : MonoBehaviour
 
     private bool isJumping;
 
+    //For the head bob
+    [SerializeField] private Transform weaponParent;
+    private Vector3 weaponParentOrigin;
+
     private void Awake()
     {
         charController = GetComponent<CharacterController>();
+        weaponParentOrigin = weaponParent.localPosition; // dapat ba sa start to
+
     }
 
     private void Update()
     {
         PlayerMovement();
+
+        //idle version of headbob
+        if()
+        {
+            HeadBob();
+        }
     }
 
     private void PlayerMovement()
@@ -36,7 +48,6 @@ public class PlayerMove : MonoBehaviour
 
         //ClampMagnitude is like Mathf.Clamp but for Vector3 and you can only specify a maximum value
         charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
-
         JumpInput();
     }
 
@@ -64,5 +75,10 @@ public class PlayerMove : MonoBehaviour
 
         charController.slopeLimit = 90.0f;
         isJumping = false;
+    }
+
+    private void HeadBob(float z, float xIntensity, float yIntensity)
+    {
+        weaponParent.localPosition = new Vector3(Mathf.Cos(z) * xIntensity, Mathf.Sin(z) * yIntensity, weaponParentOrigin.z);
     }
 }
