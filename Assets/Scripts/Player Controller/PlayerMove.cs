@@ -18,6 +18,8 @@ public class PlayerMove : MonoBehaviour
     //For the head bob
     [SerializeField] private Transform weaponParent;
     private Vector3 weaponParentOrigin;
+    private float movementCounter;
+    private float idleCounter;
 
     private void Awake()
     {
@@ -31,10 +33,7 @@ public class PlayerMove : MonoBehaviour
         PlayerMovement();
 
         //idle version of headbob
-        if()
-        {
-            HeadBob();
-        }
+
     }
 
     private void PlayerMovement()
@@ -49,6 +48,18 @@ public class PlayerMove : MonoBehaviour
         //ClampMagnitude is like Mathf.Clamp but for Vector3 and you can only specify a maximum value
         charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
         JumpInput();
+
+        //try headbob here, idle version
+        if((horizInput == 0) && (vertInput == 0))
+        {
+            HeadBob(idleCounter, 1f, 1f);
+            idleCounter += Time.deltaTime;
+        }
+        else
+        {
+            HeadBob(movementCounter, 5f, 5f); //motion version
+            movementCounter += Time.deltaTime;
+        }
     }
 
     private void JumpInput()
