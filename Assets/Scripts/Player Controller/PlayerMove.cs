@@ -20,6 +20,7 @@ public class PlayerMove : MonoBehaviour
     private Vector3 weaponParentOrigin;
     private float movementCounter;
     private float idleCounter;
+    private Vector3 targetWeaponBobPosition;
 
     private void Awake()
     {
@@ -31,8 +32,6 @@ public class PlayerMove : MonoBehaviour
     private void Update()
     {
         PlayerMovement();
-
-        //idle version of headbob
 
     }
 
@@ -52,14 +51,18 @@ public class PlayerMove : MonoBehaviour
         //try headbob here, idle version
         if((horizInput == 0) && (vertInput == 0))
         {
-            HeadBob(idleCounter, 1f, 1f);
+            HeadBob(idleCounter, 0.025f, 0.025f);
             idleCounter += Time.deltaTime;
+            weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
         }
         else
         {
-            HeadBob(movementCounter, 5f, 5f); //motion version
-            movementCounter += Time.deltaTime;
+            HeadBob(movementCounter, 0.038f, 0.038f); //motion version
+            movementCounter += Time.deltaTime * 2.7f;
+            weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 4f);
         }
+        
+        
     }
 
     private void JumpInput()
@@ -90,6 +93,6 @@ public class PlayerMove : MonoBehaviour
 
     private void HeadBob(float z, float xIntensity, float yIntensity)
     {
-        weaponParent.localPosition = new Vector3(Mathf.Cos(z) * xIntensity, Mathf.Sin(z) * yIntensity, weaponParentOrigin.z);
+        targetWeaponBobPosition = weaponParent.localPosition = weaponParentOrigin + new Vector3(Mathf.Cos(z) * xIntensity, Mathf.Sin(z * 2) * yIntensity, 0);
     }
 }
